@@ -1,0 +1,1824 @@
+Below is a comprehensive set of answers to the interview questions provided in the document, formatted in pure Markdown. The answers are concise, accurate, and tailored to the context of the questions, covering Java, Selenium, Cucumber, API testing, and other relevant topics. Each section corresponds to the company or interview round as listed in the document.
+
+---
+
+## TCS First Round - 1
+
+1. **What is OOPs?**
+   - Object-Oriented Programming (OOP) is a programming paradigm based on objects and classes. It emphasizes four principles: encapsulation, inheritance, polymorphism, and abstraction to make code modular, reusable, and maintainable.
+
+2. **What is abstraction?**
+   - Abstraction is hiding complex implementation details and exposing only essential features of an object. In Java, it is achieved using abstract classes or interfaces. Example: `WebDriver` interface in Selenium hides browser-specific implementation.
+
+3. **Explain stale element exception**
+   - `StaleElementReferenceException` occurs when a referenced web element is no longer attached to the DOM (e.g., page refresh or element change). Handle it by re-locating the element using a fresh locator or using explicit waits.
+
+4. **Explain frame and syntax**
+   - Frames (iframes) are HTML elements embedding another HTML document. In Selenium, switch to a frame using:
+     ```java
+     driver.switchTo().frame(index); // by index
+     driver.switchTo().frame("frameName"); // by name
+     driver.switchTo().frame(WebElement); // by WebElement
+     driver.switchTo().defaultContent(); // back to main content
+     ```
+
+5. **Explain your project and framework**
+   - **Project**: Describe the application (e.g., e-commerce, banking), its purpose, and your role (e.g., automation testing).
+   - **Framework**: Example: Cucumber BDD with Selenium, using POM (Page Object Model) for maintainability, TestNG for assertions, Maven for dependency management, and Jenkins for CI/CD. Structure includes feature files, step definitions, page objects, and utilities.
+
+6. **Explain API**
+   - An API (Application Programming Interface) allows communication between software systems. It defines requests (e.g., GET, POST) and responses (e.g., JSON). Example: REST API for fetching user data from a server.
+
+7. **Explain static?**
+   - The `static` keyword in Java denotes class-level members (variables, methods) that belong to the class, not instances. Accessed without creating an object. Example:
+     ```java
+     public static int count = 0; // Shared across all instances
+     public static void method() { ... }
+     ```
+
+8. **Scenario and Scenario Outline uses**
+   - **Scenario**: A single test case in Cucumber with specific inputs (e.g., login with one username/password).
+   - **Scenario Outline**: Used for data-driven testing, running the same scenario with multiple sets of data using `<placeholders>` and an Examples table.
+
+9. **Use of background keyword?**
+   - The `Background` keyword in Cucumber defines common preconditions (steps) executed before each scenario in a feature file. Example: Logging into an application before testing features.
+
+10. **Different types of API?**
+    - **REST**: Uses HTTP methods (GET, POST, PUT, DELETE), stateless, JSON/XML data.
+    - **SOAP**: XML-based, protocol with strict standards, supports complex operations.
+    - **GraphQL**: Query-based API, allows clients to request specific data.
+    - **gRPC**: High-performance, uses Protocol Buffers for microservices.
+
+11. **What is method overriding? How to achieve it in your project?**
+    - Method overriding is when a subclass provides a specific implementation of a method defined in its superclass. Requirements: same method name, parameters, and return type; superclass method must not be final/private.
+    - **In Project**: Example: In a Selenium framework, override a `BasePage` method `clickButton()` in a specific page class to handle page-specific logic.
+
+12. **Tools for API automation testing?**
+    - Postman, RestAssured, SoapUI, JMeter, Karate, and Newman (for Postman scripts).
+
+13. **How you will give story points?**
+    - Story points are assigned based on complexity, effort, and risk using Fibonacci sequence (1, 2, 3, 5, 8, etc.). Consider factors like test case complexity, dependencies, and unknowns. Discuss with the team during sprint planning.
+
+14. **How will you handle frame?**
+    - Use `driver.switchTo().frame()` to switch to an iframe by index, name, or WebElement. Perform actions, then switch back using `driver.switchTo().defaultContent()` or `driver.switchTo().parentFrame()`.
+
+15. **What is fluent wait?**
+    - Fluent Wait is a dynamic wait in Selenium that polls for an element at regular intervals (e.g., every 500ms) with a maximum timeout. It allows custom conditions and ignores specific exceptions. Syntax:
+      ```java
+      FluentWait<WebDriver> wait = new FluentWait<>(driver)
+          .withTimeout(Duration.ofSeconds(30))
+          .pollingEvery(Duration.ofMillis(500))
+          .ignoring(NoSuchElementException.class);
+      wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("id")));
+      ```
+
+16. **Explain about Jenkins?**
+    - Jenkins is an open-source CI/CD tool automating build, test, and deployment processes. It supports scheduling, pipeline creation, and integration with Git, Maven, and testing frameworks like TestNG/Cucumber.
+
+17. **How to create a build in Jenkins?**
+    - Steps:
+      1. Install Jenkins, create a new job (Freestyle/Pipeline).
+      2. Configure SCM (e.g., Git repository URL, credentials).
+      3. Add build steps (e.g., execute shell: `mvn test` for Maven projects).
+      4. Set triggers (e.g., poll SCM, schedule).
+      5. Save and run the build manually or via triggers.
+
+18. **Explain your framework?**
+    - Example: Hybrid framework combining Cucumber (BDD), Selenium (UI testing), TestNG (assertions), and Maven (dependency management). Structure:
+      - **Feature Files**: Gherkin scenarios.
+      - **Step Definitions**: Java code for scenario steps.
+      - **Page Objects**: POM for UI elements.
+      - **Utilities**: Common methods (e.g., waits, screenshots).
+      - **TestNG**: For test execution and reporting.
+      - **Jenkins**: For CI/CD integration.
+
+---
+
+## TCS Second Round - 2
+
+1. **Difference between product backlog and sprint backlog**
+   - **Product Backlog**: A prioritized list of all features, enhancements, and bugs for the entire project, maintained by the Product Owner.
+   - **Sprint Backlog**: A subset of the product backlog selected for a specific sprint, containing tasks the team commits to deliver.
+
+2. **How do we use variable and class which is same in another class in Java?**
+   - Use inheritance, interfaces, or composition to share variables/classes. Example:
+     ```java
+     class ClassA {
+         int var = 10;
+     }
+     class ClassB extends ClassA {
+         void useVar() {
+             System.out.println(var); // Access inherited variable
+         }
+     }
+     ```
+
+3. **API Postman tool extensions**
+   - Postman extensions include Newman (CLI for running collections), Postman Interceptor (captures browser requests), and Postman CLI for CI/CD integration.
+
+4. **How do we use code in API Postman tool for taking results?**
+   - Use JavaScript in Postman’s “Tests” tab to validate responses. Example:
+     ```javascript
+     pm.test("Status code is 200", function () {
+         pm.response.to.have.status(200);
+     });
+     let jsonData = pm.response.json();
+     pm.expect(jsonData.key).to.eql("value");
+     ```
+
+5. **OOPs concept**
+   - **Encapsulation**: Bundling data and methods, restricting access (e.g., private fields with getters/setters).
+   - **Inheritance**: Reusing parent class properties/methods in a child class.
+   - **Polymorphism**: Method overloading (compile-time) and overriding (runtime).
+   - **Abstraction**: Hiding implementation details using abstract classes/interfaces.
+
+6. **Selenium latest software version**
+   - As of July 2025, the latest Selenium version is 4.x (e.g., 4.21.0). Always check [Selenium’s official site](https://www.selenium.dev/) for updates.
+
+7. **Are you learning any new tool?**
+   - Example answer: “Yes, I’m exploring Playwright for cross-browser testing and Appium for mobile automation to enhance my skill set.”
+
+8. **Which tool are you using for raising bugs?**
+   - Common tools: JIRA, Bugzilla, Azure DevOps, or Trello. Example: “I use JIRA to log defects, including steps to reproduce, screenshots, and severity.”
+
+---
+
+## Cognizant
+
+1. **Self introduction**
+   - Example: “I’m [Your Name], a QA Engineer with X years of experience in automation testing using Selenium, Java, and Cucumber. I’ve worked on [project type], focusing on UI and API testing, ensuring quality delivery.”
+
+2. **Why did you leave your previous butler?**
+   - Example: “I sought new challenges and opportunities to grow in automation and work on diverse projects in a dynamic environment.”
+
+3. **Framework explanation**
+   - Example: Data-driven/BDD framework with Selenium, TestNG/Cucumber, and Maven. Structure includes:
+     - **Page Objects**: For maintainable locators.
+     - **Test Data**: Excel/JSON for inputs.
+     - **Utilities**: For waits, screenshots, etc.
+     - **Reports**: Extent Reports for test results.
+
+4. **Swap two variables without using 3rd variable**
+   ```java
+   int a = 5, b = 10;
+   a = a + b; // a = 15
+   b = a - b; // b = 5
+   a = a - b; // a = 10
+   ```
+
+5. **Write a code for Palindrome**
+   ```java
+   public boolean isPalindrome(String str) {
+       str = str.toLowerCase().replaceAll("[^a-z0-9]", "");
+       int left = 0, right = str.length() - 1;
+       while (left < right) {
+           if (str.charAt(left++) != str.charAt(right--)) return false;
+       }
+       return true;
+   }
+   ```
+
+6. **How to take screenshot?**
+   ```java
+   import org.openqa.selenium.TakesScreenshot;
+   import org.apache.commons.io.FileUtils;
+   File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+   FileUtils.copyFile(src, new File("path/screenshot.png"));
+   ```
+
+7. **What is chaining in Rest Assured?**
+   - Chaining in RestAssured allows sequential API calls where the response of one call is used in the next. Example:
+     ```java
+     Response response = given().header("Content-Type", "application/json")
+         .body(requestBody)
+         .when().post("/api/endpoint")
+         .then().statusCode(200)
+         .extract().response();
+     ```
+
+8. **What is an API header?**
+   - API headers are key-value pairs in HTTP requests/responses, providing metadata like authentication (`Authorization`), content type (`Content-Type`), or caching info.
+
+9. **How you cover end-to-end API testing?**
+   - Steps:
+     1. Understand API requirements (endpoints, methods, payloads).
+     2. Create test cases for positive/negative scenarios.
+     3. Use tools like RestAssured/Postman for automation.
+     4. Validate status codes, response body, headers, and performance.
+     5. Integrate with CI/CD (e.g., Jenkins).
+     6. Generate reports (e.g., Extent Reports).
+
+10. **How to handle switch windows in Selenium**
+    ```java
+    String parentWindow = driver.getWindowHandle();
+    for (String window : driver.getWindowHandles()) {
+        driver.switchTo().window(window);
+        // Perform actions
+    }
+    driver.switchTo().window(parentWindow); // Switch back
+    ```
+
+11. **Explain about your project and experience**
+    - **Project**: E.g., E-commerce platform testing, ensuring UI and API functionality.
+    - **Experience**: X years in automation using Selenium, Java, Cucumber, and RestAssured. Roles include test case design, script development, and defect reporting.
+
+12. **Explain about your project structure**
+    - Structure:
+      - `src/test/java`: Step definitions, page objects, utilities.
+      - `src/test/resources`: Feature files, test data (Excel/JSON).
+      - `pom.xml`: Maven dependencies.
+      - `config`: Configuration files (e.g., browser settings).
+      - `reports`: Extent/TestNG reports.
+
+13. **Roles and Responsibilities**
+    - Design and execute manual/automated test cases.
+    - Develop automation scripts using Selenium/Cucumber.
+    - Perform API testing with RestAssured.
+    - Log and track defects in JIRA.
+    - Collaborate in Agile ceremonies (sprint planning, retrospectives).
+    - Integrate tests with Jenkins for CI/CD.
+
+14. **What framework using in your project explain it in detail**
+    - Example: Cucumber BDD with Selenium:
+      - **Feature Files**: Gherkin-based scenarios.
+      - **Step Definitions**: Java code mapping to steps.
+      - **Page Objects**: Encapsulate UI elements (POM).
+      - **TestNG**: For assertions and test execution.
+      - **Maven**: Dependency management.
+      - **Jenkins**: CI/CD integration.
+      - **Reports**: Extent Reports for detailed reporting.
+
+15. **Test data’s where you maintain**
+    - Test data is maintained in:
+      - **Excel/CSV**: For large datasets, read using Apache POI.
+      - **JSON/XML**: For API testing.
+      - **Properties Files**: For configurations (e.g., URLs, credentials).
+      - **Database**: For dynamic data using JDBC.
+
+16. **OOPs concepts where you applied**
+    - **Encapsulation**: Page objects with private locators and public methods.
+    - **Inheritance**: Base test class for common setup/teardown.
+    - **Polymorphism**: Overriding methods in page classes.
+    - **Abstraction**: Using interfaces like `WebDriver` for browser actions.
+
+17. **What challenge you faced**
+    - Example: Handling dynamic elements (e.g., StaleElementException) resolved by using explicit waits or re-locating elements. Another challenge: Managing test data consistency, resolved by using centralized Excel/JSON files.
+
+18. **Are you in part of regression or script writing**
+    - Involved in both:
+      - **Regression**: Select and execute test cases to ensure existing functionality is intact.
+      - **Script Writing**: Develop automation scripts for new features using Selenium/Cucumber.
+
+19. **Explain Jenkins - Continuous Integration**
+    - Jenkins automates the build, test, and deployment process. CI involves:
+      - Pulling code from Git.
+      - Building with Maven (`mvn test`).
+      - Running automated tests (Selenium/Cucumber).
+      - Generating reports and notifying stakeholders.
+      - Example: Scheduled nightly builds to run regression suites.
+
+20. **Method overloading**
+    - Method overloading is defining multiple methods with the same name but different parameters (number, type, or order) in the same class. Example:
+      ```java
+      void click(By locator) { ... }
+      void click(WebElement element) { ... }
+      ```
+
+21. **Reverse string**
+    ```java
+    public String reverseString(String str) {
+        return new StringBuilder(str).reverse().toString();
+    }
+    ```
+
+22. **XPath**
+    - XPath is a query language to locate elements in XML/HTML. Types:
+      - **Absolute**: Full path (e.g., `/html/body/div[1]`).
+      - **Relative**: Partial path (e.g., `//input[@id='username']`).
+      - **Axes**: `parent`, `child`, `following-sibling`, etc.
+
+23. **TestNG order of execution**
+    - Annotations execute in this order:
+      1. `@BeforeSuite`
+      2. `@BeforeTest`
+      3. `@BeforeClass`
+      4. `@BeforeMethod`
+      5. `@Test`
+      6. `@AfterMethod`
+      7. `@AfterClass`
+      8. `@AfterTest`
+      9. `@AfterSuite`
+
+24. **How you will be using the constructor in Selenium**
+    - Constructors initialize page objects with WebDriver. Example:
+      ```java
+      public class LoginPage {
+          private WebDriver driver;
+          public LoginPage(WebDriver driver) {
+              this.driver = driver;
+              PageFactory.initElements(driver, this);
+          }
+      }
+      ```
+
+25. **What are the locators available in Selenium**
+    - ID, Name, ClassName, TagName, LinkText, PartialLinkText, XPath, CSS Selector.
+
+26. **API status code**
+    - Common codes:
+      - `200`: OK (successful request).
+      - `201`: Created (resource created).
+      - `400`: Bad Request.
+      - `401`: Unauthorized.
+      - `404`: Not Found.
+      - `500`: Internal Server Error.
+
+27. **What is the use of PATCH code in API**
+    - PATCH updates a resource partially (e.g., updating only a user’s email). Example:
+      ```java
+      given().body("{\"email\": \"new@email.com\"}")
+          .when().patch("/api/users/1")
+          .then().statusCode(200);
+      ```
+
+28. **What is the purpose of GET in API**
+    - GET retrieves data from a server without modifying it. Example: Fetch user details (`/api/users/1`).
+
+29. **What POST method will do in API**
+    - POST creates a new resource on the server. Example: Create a new user with a JSON payload.
+
+30. **How you will handle the windows in Selenium**
+    ```java
+    String parent = driver.getWindowHandle();
+    for (String window : driver.getWindowHandles()) {
+        driver.switchTo().window(window);
+    }
+    driver.switchTo().window(parent);
+    ```
+
+31. **Explain the step definition in Cucumber**
+    - Step definitions are Java methods mapping Gherkin steps to code. Example:
+      ```java
+      @Given("user is on login page")
+      public void userIsOnLoginPage() {
+          driver.get("https://example.com/login");
+      }
+      ```
+
+32. **Write a code on Selenium to launch the browser**
+    ```java
+    WebDriver driver = new ChromeDriver();
+    driver.manage().window().maximize();
+    driver.get("https://example.com");
+    ```
+
+33. **Explain this keyword**
+    - The `this` keyword refers to the current object in Java. Used to:
+      - Differentiate instance variables from parameters.
+      - Call another constructor in the same class.
+      ```java
+      public class Test {
+          int x;
+          public Test(int x) {
+              this.x = x; // Refers to instance variable
+          }
+      }
+      ```
+
+34. **Have you done estimation on your project**
+    - Yes, estimated tasks using story points (Fibonacci) based on complexity, effort, and risk during sprint planning.
+
+35. **On Cucumber, where you will store the XPath**
+    - Store XPaths in page object classes using `@FindBy` (Page Factory) or as constants. Example:
+      ```java
+      @FindBy(xpath = "//input[@id='username']")
+      private WebElement usernameField;
+      ```
+
+36. **On where you will be adding the dependencies in Cucumber**
+    - Dependencies are added in `pom.xml` (Maven). Example:
+      ```xml
+      <dependency>
+          <groupId>io.cucumber</groupId>
+          <artifactId>cucumber-java</artifactId>
+          <version>7.11.0</version>
+      </dependency>
+      ```
+
+37. **Navigations in TestNG**
+    - Navigation methods in Selenium (used in TestNG tests):
+      ```java
+      driver.get("https://example.com"); // Load URL
+      driver.navigate().to("https://example.com"); // Same as get
+      driver.navigate().back();
+      driver.navigate().forward();
+      driver.navigate().refresh();
+      ```
+
+38. **How you will handle the dropdown in Selenium**
+    ```java
+    Select dropdown = new Select(driver.findElement(By.id("dropdown")));
+    dropdown.selectByVisibleText("Option");
+    dropdown.selectByValue("value");
+    dropdown.selectByIndex(1);
+    ```
+
+39. **Have you developed any frameworks**
+    - Yes, developed a hybrid framework using Cucumber, Selenium, TestNG, and Maven, incorporating POM, data-driven testing, and CI/CD integration with Jenkins.
+
+40. **Write a test case for one component that you had used in your project**
+    - Example (Login Button):
+      - **Test Case**: Verify login button functionality.
+      - **Steps**: Navigate to login page, enter valid credentials, click login button, verify successful login.
+      - **Code**:
+        ```java
+        @Test
+        public void testLoginButton() {
+            LoginPage login = new LoginPage(driver);
+            login.enterCredentials("user", "pass");
+            login.clickLoginButton();
+            Assert.assertTrue(driver.getCurrentUrl().contains("dashboard"));
+        }
+        ```
+
+41. **How will you pass data to webelements**
+    ```java
+    WebElement element = driver.findElement(By.id("username"));
+    element.sendKeys("testuser"); // Pass data
+    ```
+
+42. **Explain WebElement methods**
+    - `sendKeys()`: Enter text.
+    - `click()`: Click element.
+    - `getText()`: Retrieve text.
+    - `getAttribute()`: Get attribute value.
+    - `isDisplayed()`, `isEnabled()`, `isSelected()`: Check element state.
+    - `clear()`: Clear text field.
+
+43. **Write the syntax for the Extent Report**
+    ```java
+    ExtentReports extent = new ExtentReports("path/report.html");
+    ExtentTest test = extent.createTest("TestName");
+    test.log(Status.PASS, "Step passed");
+    extent.flush();
+    ```
+
+44. **How many locators that you had used in your project**
+    - Used ID, Name, XPath, CSS Selector, ClassName, and LinkText based on element uniqueness and stability.
+
+45. **Write a syntax for CSS Selector**
+    ```java
+    driver.findElement(By.cssSelector("input#username"));
+    ```
+
+46. **How will you get the background color of the WebElement**
+    ```java
+    String bgColor = driver.findElement(By.id("element")).getCssValue("background-color");
+    ```
+
+47. **Explain the TestNG annotations**
+    - `@BeforeSuite`, `@AfterSuite`: Run once per suite.
+    - `@BeforeTest`, `@AfterTest`: Run per test tag in testng.xml.
+    - `@BeforeClass`, `@AfterClass`: Run per test class.
+    - `@BeforeMethod`, `@AfterMethod`: Run before/after each test method.
+    - `@Test`: Marks a test method.
+
+48. **How will you run the runner class in Cucumber**
+    ```java
+    @RunWith(Cucumber.class)
+    @CucumberOptions(
+        features = "src/test/resources/features",
+        glue = "stepdefinitions",
+        tags = "@smoke",
+        plugin = {"pretty", "html:target/cucumber-reports"}
+    )
+    public class TestRunner {}
+    ```
+    Run via Maven: `mvn test`.
+
+49. **How will you handle alerts**
+    ```java
+    Alert alert = driver.switchTo().alert();
+    alert.accept(); // Click OK
+    alert.dismiss(); // Click Cancel
+    String alertText = alert.getText(); // Get alert text
+    ```
+
+50. **How will you handle the dropdown**
+    - Same as Q38 (Select class usage).
+
+---
+
+## CTS L1 and L2 Interview Questions
+
+1. **Different ways to open URL**
+   ```java
+   driver.get("https://example.com");
+   driver.navigate().to("https://example.com");
+   ```
+
+2. **Different keywords under List and Set**
+   - **List**: `add()`, `remove()`, `get()`, `size()`, `contains()`.
+   - **Set**: `add()`, `remove()`, `contains()`, `size()`, `clear()`.
+
+3. **Explain about framework**
+   - Same as TCS Q18.
+
+4. **Background**
+   - Defines common steps run before each scenario in a feature file. Example:
+     ```gherkin
+     Background:
+       Given user is logged in
+     ```
+
+5. **DryRun**
+   - `dryRun = true` in Cucumber options validates feature files and step definitions without executing tests. Example:
+     ```java
+     @CucumberOptions(dryRun = true)
+     ```
+
+6. **Write XPath and tell about XPath types briefly**
+   - **Syntax**: `//tag[@attribute='value']`
+   - **Types**:
+     - **Absolute**: Full path (`/html/body/div`).
+     - **Relative**: Partial path (`//input[@id='id']`).
+     - **Dynamic**: Using `contains()`, `starts-with()`, or axes.
+
+7. **Write the code for going back current browser to previous browser**
+   ```java
+   driver.navigate().back();
+   ```
+
+8. **How will you handle windows handle**
+   - Same as Q30.
+
+9. **Actions and methods**
+   - `Actions` class handles complex user interactions:
+     ```java
+     Actions actions = new Actions(driver);
+     actions.moveToElement(element).click().build().perform();
+     ```
+     Methods: `click()`, `doubleClick()`, `dragAndDrop()`, `keyDown()`, `moveToElement()`.
+
+10. **Are you using take screenshot in your project**
+    - Yes, for failed test cases using `TakesScreenshot`. Example: See Q6.
+
+11. **Explain Maven tool and pom.xml**
+    - Maven is a build automation tool. `pom.xml` defines:
+      - Dependencies (e.g., Selenium, TestNG).
+      - Plugins (e.g., Surefire for test execution).
+      - Build configurations.
+      ```xml
+      <dependency>
+          <groupId>org.seleniumhq.selenium</groupId>
+          <artifactId>selenium-java</artifactId>
+          <version>4.21.0</version>
+      </dependency>
+      ```
+
+12. **From dialog box, you need to import the file, how will you handle this**
+    ```java
+    driver.findElement(By.id("fileInput")).sendKeys("C:/path/to/file.txt");
+    ```
+
+13. **What’s class and interface**
+    - **Class**: Blueprint for objects, contains fields and methods.
+    - **Interface**: Abstract type with method signatures, implemented by classes. Example: `WebDriver` interface.
+
+14. **What’s abstract class**
+    - An abstract class cannot be instantiated and may contain abstract (unimplemented) and concrete methods. Example:
+      ```java
+      abstract class BasePage {
+          abstract void click();
+      }
+      ```
+
+15. **Webtable**
+    ```java
+    List<WebElement> rows = driver.findElements(By.xpath("//table//tr"));
+    for (WebElement row : rows) {
+        List<WebElement> cells = row.findElements(By.tagName("td"));
+        for (WebElement cell : cells) {
+            System.out.println(cell.getText());
+        }
+    }
+    ```
+
+16. **Move to element**
+    ```java
+    Actions actions = new Actions(driver);
+    actions.moveToElement(driver.findElement(By.id("element"))).build().perform();
+    ```
+
+17. **Cucumber framework**
+    - Same as TCS Q18.
+
+18. **int [] = [1,0,0,2,0,0,0,3]. Output [1,2,3,0,0,0]**
+    ```java
+    public int[] moveZeros(int[] arr) {
+        int nonZeroPos = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] != 0) arr[nonZeroPos++] = arr[i];
+        }
+        while (nonZeroPos < arr.length) arr[nonZeroPos++] = 0;
+        return arr;
+    }
+    ```
+
+19. **How will you handle frames inside frames**
+    ```java
+    driver.switchTo().frame("parentFrame");
+    driver.switchTo().frame("childFrame");
+    // Perform actions
+    driver.switchTo().parentFrame(); // Back to parent frame
+    driver.switchTo().defaultContent(); // Back to main content
+    ```
+
+20. **Cucumber with data table**
+    ```gherkin
+    Scenario: Login with credentials
+      Given user enters credentials
+        | username | password |
+        | user1    | pass1    |
+      When user clicks login
+      Then user is logged in
+    ```
+    ```java
+    @Given("user enters credentials")
+    public void enterCredentials(DataTable dataTable) {
+        List<Map<String, String>> data = dataTable.asMaps();
+        driver.findElement(By.id("username")).sendKeys(data.get(0).get("username"));
+        driver.findElement(By.id("password")).sendKeys(data.get(0).get("password"));
+    }
+    ```
+
+21. **Using Scenario Outline, how will you pass the data**
+    ```gherkin
+    Scenario Outline: Login with multiple users
+      Given user enters "<username>" and "<password>"
+      When user clicks login
+      Then user is logged in
+    Examples:
+      | username | password |
+      | user1    | pass1    |
+      | user2    | pass2    |
+    ```
+
+22. **Where will you pass the test data**
+    - In feature files (DataTable, Scenario Outline), Excel/CSV, JSON, or database.
+
+23. **Will you pass test data in Excel in your project?**
+    - Yes, using Apache POI to read/write Excel files for data-driven testing.
+
+24. **Will you configure Jenkins**
+    - Yes, configured Jenkins for CI/CD by setting up jobs, linking Git, and running Maven commands (`mvn test`).
+
+25. **For click, how many ways you’ll use in Selenium**
+    - `element.click()`: Standard click.
+    - `Actions.click()`: For complex interactions.
+    - `JavascriptExecutor`: `((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);`.
+    - `Robot` class: For native clicks.
+
+26. **POM**
+    - Page Object Model organizes code by creating classes for each page, encapsulating locators and methods. Example:
+      ```java
+      public class LoginPage {
+          @FindBy(id = "username") WebElement usernameField;
+          public void enterUsername(String username) {
+              usernameField.sendKeys(username);
+          }
+      }
+      ```
+
+---
+
+## Capgemini Interview Questions
+
+1. **Tell about yourself**
+   - Same as Cognizant Q1.
+
+2. **OOPs concept**
+   - Same as TCS Q5.
+
+3. **Palindrome program**
+   - Same as Cognizant Q5.
+
+4. **Axes XPath in Flipkart**
+   - Example: For a product on Flipkart: `//div[contains(@class,'product')]//following-sibling::div`.
+
+5. **Constant variable in Java**
+   - Declared using `static final`. Example:
+     ```java
+     public static final String URL = "https://example.com";
+     ```
+
+6. **Constructor, default constructor execution, and usage in your project**
+   - **Constructor**: Initializes objects. **Default Constructor**: No parameters, provided by Java if no constructor is defined.
+   - **Usage**: In Selenium, initialize `WebDriver` in page objects:
+     ```java
+     public LoginPage(WebDriver driver) {
+         this.driver = driver;
+         PageFactory.initElements(driver, this);
+     }
+     ```
+
+7. **Explain POM**
+   - Same as CTS Q26.
+
+8. **How to use Excel data**
+   ```java
+   import org.apache.poi.ss.usermodel.*;
+   FileInputStream fis = new FileInputStream("data.xlsx");
+   Workbook workbook = WorkbookFactory.create(fis);
+   Sheet sheet = workbook.getSheetAt(0);
+   Row row = sheet.getRow(1);
+   String data = row.getCell(0).getStringCellValue();
+   ```
+
+9. **Cross-browser test in TestNG**
+   ```xml
+   <parameter name="browser" value="chrome"/>
+   <test name="ChromeTest">
+       <parameter name="browser" value="chrome"/>
+       <classes>
+           <class name="TestClass"/>
+       </classes>
+   </test>
+   ```
+   ```java
+   @Parameters("browser")
+   @Test
+   public void test(String browser) {
+       WebDriver driver = browser.equals("chrome") ? new ChromeDriver() : new FirefoxDriver();
+   }
+   ```
+
+10. **TestNG annotation with detail**
+    - Same as Cognizant Q47.
+
+11. **Challenges in your project**
+    - Same as Cognizant Q17.
+
+12. **Gherkins in Cucumber**
+    - Gherkin keywords: `Feature`, `Scenario`, `Given`, `When`, `Then`, `And`, `But`, `Background`, `Scenario Outline`, `Examples`.
+
+13. **Example in feature file**
+    ```gherkin
+    Feature: Login
+      Scenario: Valid login
+        Given user is on login page
+        When user enters "user" and "pass"
+        Then user is logged in
+    ```
+
+14. **Smoke, regression, performance testing**
+    - **Smoke**: Tests critical functionalities to ensure system stability.
+    - **Regression**: Tests to verify existing features after changes.
+    - **Performance**: Tests system behavior under load (e.g., JMeter).
+
+15. **Execution of environmental details**
+    - Configure environment in `properties` files or `pom.xml` (e.g., `dev`, `qa`, `prod` URLs). Use Maven profiles or environment variables.
+
+16. **UAT testing**
+    - User Acceptance Testing verifies the application meets business requirements in a production-like environment, conducted by stakeholders or QA.
+
+17. **Agile methodology**
+    - Iterative development with sprints (2-4 weeks). Involves sprint planning, daily stand-ups, sprint reviews, and retrospectives. QA roles: test case creation, automation, and defect reporting.
+
+18. **Run the particular test multiple times**
+    ```xml
+    <test name="Test">
+        <classes>
+            <class name="TestClass">
+                <methods>
+                    <include name="testMethod" invocationCount="5"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    ```
+
+19. **Explain Jenkins pipeline**
+    - Jenkins pipeline automates CI/CD using scripted/declarative syntax. Example:
+      ```groovy
+      pipeline {
+          agent any
+          stages {
+              stage('Build') {
+                  steps {
+                      sh 'mvn test'
+                  }
+              }
+          }
+      }
+      ```
+
+---
+
+## Capgemini Level 1 HR (Tadepalli)
+
+1. **Tell about yourselves**
+   - Same as Cognizant Q1.
+
+2. **Roles and Responsibilities**
+   - Same as Cognizant Q13.
+
+3. **How will you write negative scenarios**
+   - Example: For login, test invalid credentials, empty fields, or locked accounts to verify error messages or behavior.
+
+4. **What all the HTTP methods**
+   - GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS.
+
+5. **How will you rate yourself in API**
+   - Example: “4/5, proficient in RestAssured, Postman, and validating responses, with room to learn advanced security testing.”
+
+6. **Full form of JSON**
+   - JavaScript Object Notation.
+
+7. **Difference between POST and PUT**
+   - **POST**: Creates a new resource (non-idempotent).
+   - **PUT**: Updates an existing resource or creates if it doesn’t exist (idempotent).
+
+8. **Can we use POST method for updates**
+   - Yes, but not recommended. POST is for creating resources; PUT or PATCH is preferred for updates.
+
+9. **How much will you rate yourself in Selenium**
+   - Example: “4/5, skilled in UI automation, locators, and frameworks, exploring Selenium 4 features.”
+
+10. **Using HashMap, find the occurrence of the number 635666666666.66**
+    ```java
+    public void countDigit(long num, int digit) {
+        String str = String.valueOf(num);
+        int count = 0;
+        for (char c : str.toCharArray()) {
+            if (Character.getNumericValue(c) == digit) count++;
+        }
+        System.out.println("Occurrence of " + digit + ": " + count);
+    }
+    ```
+
+11. **String str = "hello hello world hello", what is the occurrence of "hello"**
+    ```java
+    public int countWord(String str, String word) {
+        String[] words = str.split("\\s+");
+        int count = 0;
+        for (String w : words) {
+            if (w.equals(word)) count++;
+        }
+        return count; // Output: 3
+    }
+    ```
+
+12. **Are you into API manual or API automation? How long?**
+   - Example: “API automation for 2 years using RestAssured and Postman, covering CRUD operations and response validation.”
+
+13. **Any questions for me**
+   - Example: “What are the key technologies used in your projects, and how does the team approach automation?”
+
+---
+
+## HID Global Interview Questions
+
+### Java Questions
+1. **Split the letters and number and print ("1am a C0dingF4n 0r Pr0gr4mm3r or S0ftw4r3 D3v3l0p3r")**
+   ```java
+   String str = "1am a C0dingF4n 0r Pr0gr4mm3r or S0ftw4r3 D3v3l0p3r";
+   String letters = str.replaceAll("[0-9]", "");
+   String numbers = str.replaceAll("[^0-9]", "");
+   System.out.println("Letters: " + letters);
+   System.out.println("Numbers: " + numbers);
+   ```
+
+2. **Print the frequency of integer and letters**
+   ```java
+   public void frequency(String str) {
+       Map<Character, Integer> map = new HashMap<>();
+       for (char c : str.toCharArray()) {
+           map.put(c, map.getOrDefault(c, 0) + 1);
+       }
+       map.forEach((k, v) -> System.out.println(k + ": " + v));
+   }
+   ```
+
+3. **Sum the integer**
+   ```java
+   public int sumNumbers(String str) {
+       int sum = 0;
+       for (char c : str.toCharArray()) {
+           if (Character.isDigit(c)) sum += Character.getNumericValue(c);
+       }
+       return sum;
+   }
+   ```
+
+4. **Collection End-to-End questions**
+   - **List**: Ordered, allows duplicates (e.g., `ArrayList`, `LinkedList`).
+   - **Set**: Unordered, no duplicates (e.g., `HashSet`, `TreeSet`).
+   - **Map**: Key-value pairs (e.g., `HashMap`, `TreeMap`).
+   - Example: Used `HashMap` to store test data key-value pairs.
+
+5. **OOPs concept (Polymorphism and Inheritance)**
+   - **Polymorphism**: Method overloading/overriding (see Cognizant Q20).
+   - **Inheritance**: Child class inherits parent class properties/methods using `extends`.
+
+6. **Explain Primitive and non-Primitive data types**
+   - **Primitive**: `int`, `float`, `double`, `char`, `boolean`, `byte`, `short`, `long` (fixed size, no methods).
+   - **Non-Primitive**: Classes, interfaces, arrays, Strings (reference types, have methods).
+
+### Selenium Questions
+1. **How will you handle different browser and what will you do if any one of browser is not working as expected**
+   - Use `WebDriver` interface for cross-browser testing:
+     ```java
+     WebDriver driver = new ChromeDriver(); // or FirefoxDriver
+     ```
+   - If a browser fails, check driver compatibility, update browser/driver versions, or use Selenium Grid for parallel execution.
+
+2. **Difference between final, finally, finalize**
+   - **final**: Prevents inheritance (class), overriding (method), or reassignment (variable).
+   - **finally**: Block executed after try-catch, regardless of exception.
+   - **finalize**: Method called by garbage collector before object cleanup (rarely used).
+
+3. **What are the possible XPaths can be able to taken with the given WebElements "Given Page: Facebook Login page"**
+   - Examples:
+     - `//input[@id='email']`
+     - `//input[@name='pass']`
+     - `//button[@type='submit']`
+     - `//a[contains(text(), 'Forgot')]`
+
+### Frameworks
+1. **What are the annotations you are handling in your projects?**
+   - TestNG: `@Test`, `@BeforeMethod`, `@AfterMethod`, `@BeforeClass`, `@AfterClass`, `@DataProvider`.
+   - Cucumber: `@Given`, `@When`, `@Then`.
+
+2. **Tell about assertions and usages in your frameworks?**
+   - Assertions (TestNG) validate expected vs. actual results:
+     ```java
+     Assert.assertEquals(actual, expected);
+     Assert.assertTrue(condition);
+     ```
+
+3. **Framework explanations**
+   - Same as TCS Q18.
+
+4. **How you push the codes and what are the tools are using for it and explain the hierarchy**
+   - Tools: Git, GitHub/Bitbucket.
+   - **Hierarchy**: Local repo → Remote repo (main/develop branches).
+   - Commands:
+     ```bash
+     git add .
+     git commit -m "message"
+     git push origin branch
+     ```
+
+5. **How will you validate the project to be working good or not. What are all the steps you verified it meets the expectations?**
+   - Run automated tests (unit, integration, regression).
+   - Validate reports (Extent/TestNG).
+   - Check CI/CD pipeline status in Jenkins.
+   - Perform manual exploratory testing.
+   - Verify against requirements in JIRA.
+
+### Testing Related Questions
+1. **Difference between severity and priority and explain with real-time scenarios**
+   - **Severity**: Impact of defect (e.g., High: App crash).
+   - **Priority**: Urgency to fix (e.g., High: Fix before release).
+   - **Scenario**: Login failure (High severity, High priority); UI misalignment (Low severity, Low priority).
+
+2. **Defect Managements**
+   - Log defects in JIRA with details (steps, screenshots, logs). Track status (Open, In Progress, Resolved, Closed).
+
+3. **What are all the steps you are following to triage bugs and how will you handle with developers team?**
+   - **Steps**: Reproduce defect, log in JIRA, discuss in triage meetings, provide evidence.
+   - **With Developers**: Share detailed bug reports, reproduce in dev environment, collaborate for root cause analysis.
+
+4. **What are all the devices you are handling in your testing?**
+   - Example: Desktop browsers (Chrome, Firefox), mobile devices (Android, iOS) using BrowserStack or Appium.
+
+### Appium Related Questions
+1. **Types of applications**
+   - Native, Hybrid, Web apps.
+
+2. **Define Appium Architecture**
+   - Appium is a client-server architecture:
+     - **Client**: Test scripts (Java, Python).
+     - **Server**: Appium server translates commands to mobile-specific actions.
+     - **Device**: Executes actions via Android/iOS drivers.
+
+3. **What are all not possible to while handling devices with Appium and explain it why?**
+   - **Not Possible**: System-level actions (e.g., SIM card operations), due to OS restrictions.
+   - **Reason**: Appium interacts via app-specific APIs, not full device control.
+
+4. **Explain the Appium frameworks with the keywords which is using in your testing cycles**
+   - Framework: Appium with Cucumber/TestNG.
+   - Keywords: `findElement`, `click`, `sendKeys`, `swipe`, `tap`.
+   - Example:
+     ```java
+     driver.findElement(AppiumBy.id("com.example:id/button")).click();
+     ```
+
+### Intro Questions
+1. **Introduce yourself**
+   - Same as Cognizant Q1.
+
+2. **Explain your projects and framework**
+   - Same as TCS Q18.
+
+3. **Day-to-Day activities**
+   - Write/execute test cases, develop automation scripts, attend Agile meetings, log defects, review code, and monitor CI/CD pipelines.
+
+---
+
+## CGI Interview Questions (45 Minutes)
+
+1. **Tell me Yourself and projects**
+   - Same as Cognizant Q1 and Q11.
+
+2. **Reverse string program**
+   - Same as Cognizant Q21.
+
+3. **OOPs concept - Full explanation**
+   - Same as TCS Q5.
+
+4. **Cucumber architecture and file structure**
+   - **Architecture**: BDD framework with Gherkin, step definitions, and page objects.
+   - **File Structure**:
+     - `features/`: Gherkin files.
+     - `stepdefinitions/`: Java step implementations.
+     - `pages/`: POM classes.
+     - `utils/`: Common utilities.
+     - `testrunner/`: Runner class.
+
+5. **Scenario writing for login page and explain it**
+    ```gherkin
+    Feature: Login
+      Scenario: Successful login
+        Given user is on login page
+        When user enters valid credentials
+        Then user is redirected to dashboard
+    ```
+
+6. **TestNG annotation**
+   - Same as Cognizant Q47.
+
+7. **Selenium version you are using**
+   - Selenium 4.x (e.g., 4.21.0).
+
+---
+
+## CTS Round 1
+
+1. **Tell about yourself**
+   - Same as Cognizant Q1.
+
+2. **Manual test cases which form they will send**
+   - Manual test cases are shared via JIRA, Excel, or test management tools (e.g., TestRail) with columns: Test ID, Description, Steps, Expected Result, Actual Result.
+
+3. **Write a Sorting program**
+   ```java
+   public int[] sortArray(int[] arr) {
+       Arrays.sort(arr);
+       return arr;
+   }
+   ```
+
+4. **Difference between implicit wait and explicit wait**
+   - **Implicit Wait**: Global wait for all elements, set once.
+     ```java
+     driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+     ```
+   - **Explicit Wait**: Wait for specific conditions.
+     ```java
+     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+     wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("id")));
+     ```
+
+5. **Write syntax implicit wait and explicit wait**
+   - See Q4.
+
+6. **Without ID, tag name, text, class name, how will you locate that element**
+   - Use XPath or CSS Selector with attributes like `name`, `value`, or `type`. Example:
+     ```java
+     driver.findElement(By.xpath("//input[@name='username']"));
+     ```
+
+7. **TestNG - you have two @Test, which will be first run**
+   - By default, TestNG runs `@Test` methods alphabetically. Use `priority` to control order:
+     ```java
+     @Test(priority = 1)
+     public void testA() {}
+     @Test(priority = 2)
+     public void testB() {}
+     ```
+
+8. **Types of XPath**
+   - Same as Cognizant Q22.
+
+9. **Types of locators**
+   - Same as Cognizant Q25.
+
+---
+
+## Accenture Interview Questions
+
+1. **Tell about yourself**
+   - Same as Cognizant Q1.
+
+2. **Explain about project and framework used in project? Why using Cucumber, why not TestNG?**
+   - **Project and Framework**: Same as TCS Q18.
+   - **Why Cucumber**: Supports BDD, readable Gherkin syntax, and collaboration with non-technical stakeholders.
+   - **Why not TestNG**: TestNG is better for unit testing; Cucumber excels in end-to-end testing with business-readable scenarios.
+
+3. **How to pass data from Excel? What are the steps to use Excel in Eclipse?**
+   - **Steps**:
+     1. Add Apache POI dependency in `pom.xml`.
+     2. Read Excel using `FileInputStream` and `Workbook`.
+     3. Access data from rows/columns.
+   - **Code**: See CTS Q8.
+
+4. **What are the critical bugs you found in your project?**
+   - Example: Login failure due to incorrect API response, impacting all users. Reported in JIRA with high severity.
+
+5. **Do you have any idea API testing and Appium tool?**
+   - **API Testing**: Use RestAssured/Postman for validating endpoints, status codes, and responses.
+   - **Appium**: Mobile automation tool for native, hybrid, and web apps, using WebDriver protocol.
+
+6. **What will you do if developer won’t accept the bug and how will you manage this situation?**
+   - Reproduce the bug, provide evidence (screenshots, logs), discuss in triage meetings, and escalate to QA lead if needed.
+
+---
+
+## Java Questions (Accenture)
+
+1. **Difference between == and .equals?**
+   - `==`: Compares object references or primitive values.
+   - `.equals()`: Compares object content (e.g., String values).
+     ```java
+     String s1 = new String("test");
+     String s2 = new String("test");
+     System.out.println(s1 == s2); // false
+     System.out.println(s1.equals(s2)); // true
+     ```
+
+2. **What is abstraction and explain?**
+   - Same as TCS Q2.
+
+3. **What is difference between throw and throws?**
+   - **throw**: Explicitly throws an exception.
+     ```java
+     throw new IOException("Error");
+     ```
+   - **throws**: Declares exceptions a method might throw.
+     ```java
+     public void method() throws IOException {}
+     ```
+
+4. **String s="Selenium"; tell a logic for this output "Slnium"**
+   ```java
+   public String removeVowels(String str) {
+       return str.replaceAll("[aeiouAEIOU]", "");
+   }
+   ```
+
+---
+
+## Selenium Questions (Accenture)
+
+1. **Which version of Selenium you used in your project and what is difference between older and new version?**
+   - **Version**: Selenium 4.x.
+   - **Differences**: Selenium 4 introduces W3C-compliant WebDriver, relative locators, improved DevTools integration, and enhanced Selenium Grid.
+
+2. **How to handle windows in Selenium?**
+   - Same as Cognizant Q30.
+
+3. **Write XPath syntax, how to handle dynamic WebElement?**
+   - **Syntax**: `//tag[@attribute='value']`
+   - **Dynamic Elements**: Use `contains()`, `starts-with()`, or axes. Example:
+     ```java
+     driver.findElement(By.xpath("//div[contains(@id,'dynamic')]"));
+     ```
+
+4. **What are the disadvantages using Selenium?**
+   - No support for desktop apps.
+   - Limited mobile testing (requires Appium).
+   - Handling dynamic elements is complex.
+   - No built-in reporting (requires TestNG/Extent).
+
+5. **WebDriver Driver = new WebDriver();**
+   - **Incorrect**: `WebDriver` is an interface, cannot be instantiated. Correct syntax:
+     ```java
+     WebDriver driver = new ChromeDriver();
+     ```
+
+---
+
+## Mphasis L1 Virtual Discussion (30 mins)
+
+1. **Introduce about yourself and your project**
+   - Same as Cognizant Q1 and Q11.
+
+2. **What are the automation tools/technologies that you currently worked?**
+   - Selenium, Appium, RestAssured, Postman, Cucumber, TestNG, Maven, Jenkins.
+
+3. **Java program to create an array and find the second maximum value from array**
+   ```java
+   public int secondMax(int[] arr) {
+       int max = Integer.MIN_VALUE, secondMax = Integer.MIN_VALUE;
+       for (int num : arr) {
+           if (num > max) {
+               secondMax = max;
+               max = num;
+           } else if (num > secondMax && num != max) {
+               secondMax = num;
+           }
+       }
+       return secondMax;
+   }
+   ```
+
+4. **Have you worked in API? How will you validate the API responses?**
+   - Yes, used RestAssured/Postman. Validate:
+     - Status codes (`then().statusCode(200)`).
+     - Response body (`extract().jsonPath().get("key")`).
+     - Headers (`response.getHeader("Content-Type")`).
+
+5. **Have you worked in Database Testing?**
+   - Yes, used JDBC to connect to databases, execute SQL queries, and validate results. Example:
+     ```java
+     Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db", "user", "pass");
+     Statement stmt = conn.createStatement();
+     ResultSet rs = stmt.executeQuery("SELECT * FROM table");
+     ```
+
+6. **Explain primary key and foreign key**
+   - **Primary Key**: Unique identifier for a table row (e.g., `user_id`).
+   - **Foreign Key**: References primary key in another table to establish relationships (e.g., `order.user_id` references `users.user_id`).
+
+7. **About inner join**
+   - Combines rows from two tables where the join condition is met.
+     ```sql
+     SELECT * FROM users INNER JOIN orders ON users.user_id = orders.user_id;
+     ```
+
+8. **Scenario: Consider the code in local is correct and when you try to upload and run using Jenkins there is an error. What are the possible outcomes for the error?**
+   - Dependency mismatch in `pom.xml`.
+   - Environment differences (e.g., browser versions).
+   - Incorrect Jenkins configuration (e.g., wrong Maven command).
+   - Network issues accessing repositories.
+
+9. **About Git usage in your current project**
+   - Used Git for version control:
+     - `git add`, `git commit`, `git push` for code updates.
+     - `git pull` to fetch latest code.
+     - `git branch` for feature branches.
+     - Resolve conflicts via `git merge` or rebasing.
+
+---
+
+## TCS Interview Questions
+
+### Round 1
+1. **Explain about your project and framework**
+   - Same as TCS Q18.
+
+2. **Where did you use constructor in your project?**
+   - In page object classes to initialize `WebDriver` and `PageFactory`. See Cognizant Q24.
+
+3. **Explain about OOPs concept**
+   - Same as TCS Q5.
+
+4. **How you handle pop-up in Selenium?**
+   - Same as Cognizant Q49 (for alerts). For browser pop-ups, use `Robot` class or `sendKeys()` for file uploads.
+
+5. **Write code for string reverse**
+   - Same as Cognizant Q21.
+
+### Round 2
+1. **Explain about your project and framework**
+   - Same as TCS Q18.
+
+2. **Can we create object for abstract class? If no, then how we can access methods from abstract class?**
+   - **No**, abstract classes cannot be instantiated.
+   - **Access Methods**: Extend the abstract class and implement abstract methods:
+     ```java
+     abstract class Base {
+         void method() { System.out.println("Base method"); }
+     }
+     class Child extends Base {}
+     Child child = new Child();
+     child.method();
+     ```
+
+3. **We are searching WebElement in webpage but there is no such element then what is Selenium exceptions for single WebElement and multiple WebElement**
+   - **Single WebElement**: `NoSuchElementException`.
+   - **Multiple WebElements**: `NoSuchElementException` if no elements match; empty list for `findElements`.
+
+4. **How you handle windows in Selenium?**
+   - Same as Cognizant Q30.
+
+5. **How to find second largest number in array?**
+   - Same as Mphasis Q3.
+
+### Round 3
+1. **Explain about your project and framework**
+   - Same as TCS Q18.
+
+2. **Can we create object for abstract class? If no, then how we can access methods from abstract class?**
+   - Same as Round 2 Q2.
+
+3. **I want to run single test case multiple times in TestNG? How to do?**
+   - Same as Capgemini Q18.
+
+4. **How to delete code in GitHub?**
+   ```bash
+   git rm file
+   git commit -m "Remove file"
+   git push origin branch
+   ```
+
+5. **How to find duplicate number in array?**
+   ```java
+   public void findDuplicates(int[] arr) {
+       Set<Integer> set = new HashSet<>();
+       for (int num : arr) {
+           if (!set.add(num)) System.out.println("Duplicate: " + num);
+       }
+   }
+   ```
+
+6. **How to reverse number in Java?**
+   ```java
+   public int reverseNumber(int num) {
+       int reversed = 0;
+       while (num != 0) {
+           reversed = reversed * 10 + num % 10;
+           num /= 10;
+       }
+       return reversed;
+   }
+   ```
+
+---
+
+## ComCost L1 and L2 Rounds Interview Questions
+
+1. **How you will select the stories**
+   - Based on priority, business value, dependencies, and team capacity during sprint planning.
+
+2. **Explain epic and feature**
+   - **Epic**: Large user story spanning multiple sprints (e.g., “User Authentication”).
+   - **Feature**: Smaller, specific functionality within an epic (e.g., “Login with OTP”).
+
+3. **Explain CI and CD**
+   - **CI (Continuous Integration)**: Automated building, testing, and integration of code changes (e.g., Jenkins runs tests on Git commits).
+   - **CD (Continuous Deployment)**: Automated deployment of code to production after passing tests.
+
+4. **Write test case for creating password**
+   - **Test Case**: Verify password creation.
+     - **Steps**: Enter password, confirm password, submit.
+     - **Expected**: Password meets criteria (e.g., 8+ characters, special char), success message displayed.
+
+5. **Explain static**
+   - Same as TCS Q7.
+
+6. **Explain Git**
+   - Git is a version control system for tracking code changes. Commands: `git clone`, `git add`, `git commit`, `git push`, `git pull`, `git branch`.
+
+7. **Explain GET method**
+   - Retrieves data from a server without modifying it. Example:
+     ```java
+     given().when().get("/api/users").then().statusCode(200);
+     ```
+
+8. **Difference between POST and PUT**
+   - Same as Capgemini Q7.
+
+9. **How you will use the authentication in Postman?**
+   - Add authentication in Postman’s “Authorization” tab:
+     - **Basic Auth**: Username/password.
+     - **Bearer Token**: Add token in header.
+     - **OAuth**: Configure OAuth 2.0 flow.
+
+10. **Dependence on method**
+    ```xml
+    <test>
+        <classes>
+            <class name="TestClass">
+                <methods>
+                    <include name="test2" dependsOnMethods="test1"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    ```
+
+11. **Write end-to-end script for passing values in Selenium**
+    ```java
+    public class LoginTest {
+        WebDriver driver = new ChromeDriver();
+        @Test
+        public void login() {
+            driver.get("https://example.com/login");
+            driver.findElement(By.id("username")).sendKeys("user");
+            driver.findElement(By.id("password")).sendKeys("pass");
+            driver.findElement(By.id("login")).click();
+            Assert.assertTrue(driver.getCurrentUrl().contains("dashboard"));
+        }
+    }
+    ```
+
+12. **Reverse the string**
+    - Same as Cognizant Q21.
+
+13. **Explain about project**
+    - Same as Cognizant Q11.
+
+---
+
+## Cognizant (Java Selenium) Interview Questions (15/02/25)
+
+1. **Introduce yourself and current project handling**
+   - Same as Cognizant Q1 and Q11.
+
+2. **What is String Buffer and String Builder**
+   - **StringBuffer**: Thread-safe, mutable string, slower.
+   - **StringBuilder**: Not thread-safe, faster, used in single-threaded environments.
+     ```java
+     StringBuilder sb = new StringBuilder("test");
+     sb.append("ing"); // testing
+     ```
+
+3. **Difference between Final, Finally, and Finalize**
+   - Same as HID Q2 (Selenium).
+
+4. **What are the listeners in Cucumber Framework**
+   - Cucumber listeners (e.g., `TestNGCucumberRunner`) capture events like test start/end. Custom listeners can be implemented using `EventListener`.
+
+5. **OOPs concept (Encapsulation and Inheritance)**
+   - **Encapsulation**: See TCS Q5.
+   - **Inheritance**: See HID Q5.
+
+6. **Is two main class possible? If yes or no. Why?**
+   - **Yes**, multiple classes with `main` methods are possible in a Java project, but only one `main` is the entry point when running the program.
+
+7. **Difference between static block and main class (PSVM). Which one will run first?**
+   - **Static Block**: Executes when class is loaded.
+   - **Main Method (PSVM)**: Entry point for program execution.
+   - **Order**: Static block runs first.
+     ```java
+     static { System.out.println("Static block"); }
+     public static void main(String[] args) { System.out.println("Main"); }
+     ```
+
+8. **Feature file writing (Go to Flipkart, Login, Search Laptop, Click the Lenovo Brand and Take the First one with name and Price)**
+    ```gherkin
+    Feature: Flipkart Shopping
+      Scenario: Search and select Lenovo laptop
+        Given user is logged into Flipkart
+        When user searches for "Laptop"
+        And user clicks on Lenovo brand
+        Then user selects the first laptop
+        And captures name and price
+    ```
+
+9. **What are Tags are available and where it is used in your framework?**
+   - Tags: `@smoke`, `@regression`, `@sanity`.
+   - Used in `CucumberOptions` to filter scenarios:
+     ```java
+     @CucumberOptions(tags = "@smoke")
+     ```
+
+10. **How did you select the values which were the WebElement updated dynamically?**
+    - Use dynamic XPath/CSS with `contains()`, `starts-with()`, or wait for element stability:
+      ```java
+      WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+      wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@id,'dynamic')]")));
+      ```
+
+11. **Explain the concept Extent report creation**
+    - Same as Cognizant Q43.
+
+12. **Where did you use Group (Include and Exclude) - Exactly with real-time scenarios in your framework?**
+    ```xml
+    <groups>
+        <run>
+            <include name="smoke"/>
+            <exclude name="regression"/>
+        </run>
+    </groups>
+    ```
+    - **Scenario**: Run only `@smoke` tests before deployment, exclude `@regression` for quick validation.
+
+13. **Java Program - String is Anagram or not (Str1 = Bored, Str2 = Robed)**
+    ```java
+    public boolean isAnagram(String str1, String str2) {
+        str1 = str1.toLowerCase().replaceAll("[^a-z]", "");
+        str2 = str2.toLowerCase().replaceAll("[^a-z]", "");
+        if (str1.length() != str2.length()) return false;
+        char[] arr1 = str1.toCharArray();
+        char[] arr2 = str2.toCharArray();
+        Arrays.sort(arr1);
+        Arrays.sort(arr2);
+        return Arrays.equals(arr1, arr2);
+    }
+    ```
+
+---
+
+## DigiSME
+
+### Round 1: Test Case Writing (Payment via Scanner, 5 Mins)
+- **Test Case**: Verify payment via scanner option.
+  - **Steps**:
+    1. Navigate to payment page.
+    2. Select scanner option.
+    3. Scan QR code.
+    4. Enter amount and confirm.
+  - **Expected**: Payment successful, confirmation displayed.
+
+### Round 2: Definition and Scenario-Based Questions
+1. **Explain Sanity Testing**
+   - Quick tests to verify major functionalities work after a build. Example: Login works post-deployment.
+
+2. **Explain Regression Testing**
+   - Tests to ensure new changes haven’t broken existing functionality. Example: Re-run all login-related tests after a UI update.
+
+3. **Tomorrow product needs to be released but one of our teammates found a few defects, what will you do?**
+   - Assess defect severity/priority, discuss with stakeholders, fix critical defects, or defer release if high-severity.
+
+4. **Root Cause Analysis and where you did in your project**
+   - RCA: Identify defect cause (e.g., code, environment). Example: Login failure due to API timeout, resolved by increasing timeout.
+
+5. **Application needs to be released within hrs, As a manager I am telling you to do smoke testing, what is your approach to handle this?**
+   - Execute smoke tests for critical features (e.g., login, payment). Automate using Cucumber/Selenium, report results, and escalate issues.
+
+6. **Explain Exhaustive Testing**
+   - Testing all possible inputs and scenarios (impractical due to time). Example: Testing login with all possible character combinations.
+
+7. **Explain Defect Management and what tool you have used so far?**
+   - Log, track, and resolve defects using JIRA, including steps, screenshots, and severity.
+
+8. **Explain Agile**
+   - Iterative development with sprints, daily stand-ups, sprint reviews, and retrospectives.
+
+9. **Explain Projects done so far**
+   - Same as Cognizant Q11.
+
+10. **Explain BVP and Priority/Severity**
+    - **BVA (Boundary Value Analysis)**: Test boundary conditions (e.g., min/max password length).
+    - **Priority/Severity**: See HID Q1 (Testing).
+
+11. **What is deferred means?**
+    - A defect marked “deferred” is postponed to a future release due to low priority or time constraints.
+
+12. **Worked on any Cloud platform**
+    - Example: Used AWS for hosting test environments or BrowserStack for cross-browser testing.
+
+13. **Explain SaaS project**
+    - Software as a Service project delivers software over the internet (e.g., Salesforce). Tested UI and APIs for functionality and scalability.
+
+14. **Explain Nodes and Pods in Azure. What is the use of it when it comes to Web application**
+    - **Nodes**: Virtual machines in Azure Kubernetes Service (AKS) hosting pods.
+    - **Pods**: Smallest deployable units containing containers.
+    - **Use**: Run web app containers, scale dynamically, and manage load balancing.
+
+15. **Explain Test Bed**
+    - Test bed is the environment (hardware, software, network) set up for testing, mimicking production.
+
+16. **Explain the environment which you have worked so far**
+    - Example: QA (staging) and production-like environments with Chrome/Firefox browsers, MySQL database, and AWS hosting.
+
+17. **Design is important if yes/no then why?**
+    - **Yes**, good design (e.g., POM) improves maintainability, scalability, and reduces technical debt.
+
+18. **What is compatibility testing? Where did you use and most faced challenges**
+    - Tests app across browsers, devices, and OS. Example: Tested web app on Chrome, Firefox, and Safari using BrowserStack.
+    - **Challenges**: Browser inconsistencies, device fragmentation.
+
+19. **What is fragmentation?**
+    - In testing, fragmentation refers to device/OS diversity (e.g., Android versions), complicating mobile testing.
+
+20. **Explain Audit with your experience**
+    - Audit ensures process compliance. Example: Reviewed test cases and defect logs in JIRA for traceability.
+
+### Round 3: HR Rounds
+- General discussion on projects, location, and CTC expectations.
+
+---
+
+## CTS L1 and L2 (Additional)
+
+1. **Tell about yourself**
+   - Same as Cognizant Q1.
+
+2. **Draw your Framework architecture and explain**
+   - **Architecture**: Cucumber BDD with Selenium, TestNG, Maven, Jenkins.
+   - **Components**: Feature files, step definitions, page objects, utilities, reports.
+
+3. **Select class methods**
+   - `selectByVisibleText()`, `selectByValue()`, `selectByIndex()`, `getOptions()`, `deselectAll()`.
+
+4. **Select particular window from multiple windows**
+   - Same as Cognizant Q30.
+
+5. **Two boxes present, click the second box, XPath and JS executor not working**
+   - Use Actions class:
+     ```java
+     Actions actions = new Actions(driver);
+     actions.moveToElement(driver.findElement(By.xpath("(//div[@class='box'])[2]"))).click().build().perform();
+     ```
+
+6. **How to pass data from Excel**
+   - Same as CTS Q8.
+
+7. **How to pass data from PDF**
+   ```java
+   import org.apache.pdfbox.pdmodel.PDDocument;
+   import org.apache.pdfbox.text.PDFTextStripper;
+   PDDocument document = PDDocument.load(new File("file.pdf"));
+   PDFTextStripper stripper = new PDFTextStripper();
+   String text = stripper.getText(document);
+   ```
+
+8. **Which version Selenium using in your project**
+   - Selenium 4.x.
+
+9. **Full-page screenshot**
+   ```java
+   File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+   FileUtils.copyFile(src, new File("path/fullpage.png"));
+   ```
+
+10. **Write a code to find a previous element and next element using XPath axes**
+    ```java
+    WebElement current = driver.findElement(By.xpath("//div[@id='current']"));
+    WebElement previous = driver.findElement(By.xpath("//div[@id='current']/preceding-sibling::div"));
+    WebElement next = driver.findElement(By.xpath("//div[@id='current']/following-sibling::div"));
+    ```
+
+11. **Explain feature file**
+    - Same as Capgemini Q13.
+
+12. **Cucumber options**
+    ```java
+    @CucumberOptions(
+        features = "src/test/resources/features",
+        glue = "stepdefinitions",
+        tags = "@smoke",
+        plugin = {"pretty", "html:target/cucumber-reports"},
+        dryRun = false
+    )
+    ```
+
+13. **DryRun true/false difference**
+    - `dryRun = true`: Validates feature files and step definitions without execution.
+    - `dryRun = false`: Executes tests.
+
+14. **Explain RestAssured framework**
+    - RestAssured is a Java library for API testing, supporting GET, POST, PUT, DELETE, etc. Example:
+      ```java
+      given().header("Content-Type", "application/json")
+          .body("{\"key\": \"value\"}")
+          .when().post("/api/endpoint")
+          .then().statusCode(200);
+      ```
+
+15. **Explain PUT, GET, POST, PATCH**
+    - **GET**: Retrieve data.
+    - **POST**: Create resource.
+    - **PUT**: Update resource (idempotent).
+    - **PATCH**: Partial update.
+
+16. **How to generate token**
+    ```java
+    String token = given().formParam("username", "user")
+        .formParam("password", "pass")
+        .post("/api/login")
+        .jsonPath().getString("token");
+    ```
+
+17. **How to validate response**
+    ```java
+    given().when().get("/api/users")
+        .then().statusCode(200)
+        .body("key", equalTo("value"));
+    ```
+
+18. **How to link automation screenshots into JIRA tool**
+    - Attach screenshots to JIRA issues via API or manually upload in the issue’s attachment section.
+
+19. **Git conflict**
+    - Occurs when multiple developers modify the same file. Resolve by:
+      ```bash
+      git pull
+      # Manually edit conflicting files
+      git add .
+      git commit
+      git push
+      ```
+
+20. **Can you write SQL query**
+    ```sql
+    SELECT * FROM users WHERE age > 18;
+    ```
+
+21. **Explain Jenkins**
+    - Same as TCS Q16.
+
+22. **What is WebDriver**
+    - `WebDriver` is a Selenium interface for browser automation, implemented by `ChromeDriver`, `FirefoxDriver`, etc.
+
+23. **Write a program go to Google search testing automation and click the link and find broken link and use implicit and explicit wait**
+    ```java
+    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+    driver.get("https://google.com");
+    driver.findElement(By.name("q")).sendKeys("testing automation");
+    driver.findElement(By.name("btnK")).click();
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    WebElement link = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(@href,'example')]")));
+    link.click();
+    HttpURLConnection conn = (HttpURLConnection) new URL(link.getAttribute("href")).openConnection();
+    conn.setRequestMethod("HEAD");
+    int responseCode = conn.getResponseCode();
+    if (responseCode >= 400) System.out.println("Broken link");
+    ```
+
+24. **Have you worked in any other languages other than English**
+    - Example: “No, primarily used English for documentation and communication.”
+
+25. **How many ways to remove special characters in a string**
+    ```java
+    // Method 1: Regex
+    String clean = str.replaceAll("[^a-zA-Z0-9]", "");
+    // Method 2: Character check
+    StringBuilder clean = new StringBuilder();
+    for (char c : str.toCharArray()) {
+        if (Character.isLetterOrDigit(c)) clean.append(c);
+    }
+    ```
+
+---
+
+## Amazon
+
+### First Round
+1. **Tell about yourself**
+   - Same as Cognizant Q1.
+
+2. **Manual vs automation testing**
+   - **Manual**: Human-executed, good for exploratory testing, slow.
+   - **Automation**: Script-driven, fast, reusable, ideal for regression.
+
+3. **Prerequisites of automation testing**
+   - Stable application, clear requirements, automation tools (Selenium, Appium), test data, and skilled team.
+
+4. **I have a Prime Video app to check if it is opening and write manual test cases**
+   - **Test Case**: Verify Prime Video app opens.
+     - **Steps**: Launch app, verify home screen.
+     - **Expected**: App opens, home screen displayed.
+
+5. **How will you automate the above test cases**
+   ```java
+   AppiumDriver driver = new AndroidDriver(new URL("http://localhost:4723/wd/hub"), capabilities);
+   driver.findElement(AppiumBy.id("com.amazon.avod:id/home")).isDisplayed();
+   ```
+
+6. **Locators**
+   - Same as Cognizant Q25.
+
+7. **Functions of the driver explain**
+   - `get()`, `navigate()`, `findElement()`, `findElements()`, `manage()`, `switchTo()`, `close()`, `quit()`.
+
+8. **What is regression testing and why it is needed**
+   - Tests to ensure new changes don’t break existing functionality. Needed to maintain product stability.
+
+9. **What is Selenium**
+   - Open-source tool for automating web browsers, supporting multiple languages and browsers.
+
+10. **Scenario and test coverage**
+    - **Scenario**: Specific test condition (e.g., valid login).
+    - **Test Coverage**: Percentage of application code/features tested.
+
+11. **What is the test case**
+    - A set of conditions/steps to verify functionality, including inputs, actions, and expected results.
+
+### Second Round
+1. **50 test cases are there, how will you choose which test case to automate**
+   - Prioritize based on:
+     - High-frequency use cases.
+     - Critical functionalities (e.g., login, payment).
+     - Stable features.
+     - Repetitive tests suitable for automation.
+
+2. **You said you configure Jenkins, does it mean it is 100% CI**
+   - No, Jenkins enables CI, but 100% CI requires complete test automation, code integration, and environment stability.
+
+3. **CI/CD, so once we configure to Jenkins it does mean it is 100% CI/CD**
+   - No, CI/CD requires automated testing, deployment pipelines, and monitoring. Jenkins is just a tool.
+
+4. **What challenge you have faced in last project**
+   - Same as Cognizant Q17.
+
+5. **Did your company leave you abruptly**
+   - Example: “No, I left to pursue better opportunities.”
+
+6. **Completed graduation in 2012 have only 4.3 experience**
+   - Explain gaps (e.g., personal reasons, further studies) and highlight relevant skills
